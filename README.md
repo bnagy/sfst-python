@@ -74,6 +74,10 @@ This inherits GPLv2 from SFST; see LICENSE for details.
 
 Fork and send an PR.
 
+## Acknowledgements
+
+The bindings are based on those for [functionsimsearch](https://github.com/google/functionsimsearch), and I am grateful to [Halvar](https://github.com/thomasdullien) for his initial advice.
+
 ```
 Library Author: Helmut Schmid 
 Binding Author: Ben Nagy
