@@ -11,3 +11,10 @@ for word in "gallia est omnis divisa".split():
 		print(os.fdopen(r).read())
 	except sfst.error as err:
 		print("[SFST exception - %s]\n" % err)
+print("Testing generate")
+try:
+	r,w = os.pipe()
+	t.generate_string("laudare<V><pres><ind><active><sg><1>", w)
+	print(os.fdopen(r).read())
+except sfst.error as err:
+	print("[SFST exception - %s]\n" % err)	

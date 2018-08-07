@@ -124,6 +124,44 @@ static PyObject* PyTransducer__analyze_string(PyTransducer* self, PyObject* args
 
 }
 
+static PyObject* PyTransducer__generate_string(PyTransducer* self, PyObject* args, PyObject *kwds) {
+
+  static char* keywords[] = {(char*)"s", (char*)"fd", NULL};
+
+  char* s;
+  int fd;
+  FILE* fh;
+  bool ok;
+
+  if (!PyArg_ParseTupleAndKeywords(
+    args,
+    kwds,
+    "si",
+    keywords,
+    &s,
+    &fd)
+    )
+  {
+    PyErr_SetString(sfst_error, "Failed to parse arguments");
+    return NULL;
+  }
+
+  if ((fh = fdopen(fd,"w")) == NULL) {
+    PyErr_SetString(sfst_error, "Cannot open output handle");
+    return NULL;
+  }
+
+  ok = self->transducer_->generate_string(s, fh, true);
+  fclose(fh);
+  if (!ok) {
+    PyErr_SetString(sfst_error, "Analysis failed");
+    return NULL;
+  }
+
+  Py_RETURN_NONE;
+
+}
+
 static PyObject* PyTransducer__version(PyTransducer* self) {
   return Py_BuildValue("s", SFSTVersion);
 }
@@ -136,6 +174,7 @@ static PyMemberDef PyTransducer_members[] = {
 static PyMethodDef PyTransducer_methods[] = {
     { "version", (PyCFunction)PyTransducer__version, METH_VARARGS, NULL },
     { "analyze_string", (PyCFunction)PyTransducer__analyze_string, METH_VARARGS | METH_KEYWORDS, NULL },
+    { "generate_string", (PyCFunction)PyTransducer__generate_string, METH_VARARGS | METH_KEYWORDS, NULL },
     { NULL, NULL, 0, NULL },
 };
 
